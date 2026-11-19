@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#076e30">
+<title>CBT Ujian PKn Kelas VII — MTs Nurul Kamal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --g900:#05431f; --g800:#076e30; --g700:#088a3b; --g600:#0f9a45; --g500:#17b052;
+    --g100:#dff2e6; --g50:#eff9f2;
+    --gold:#f2c84e; --gold-d:#cf9b1e; --gold-ink:#5a4208;
+    --ink:#15241b; --muted:#5d6c62; --line:#d8e4db;
+    --bg:#e9eeeb; --card:#fff;
+    --answered:#0f9a45; --ragu:#f6a62a; --belum:#eef1ef; --belum-line:#c9d3cc;
+    --danger:#c0392b; --danger-bg:#fdecea;
+    --shadow:0 10px 28px rgba(8,58,28,.12); --sm:0 2px 8px rgba(8,58,28,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto;padding:14px}
+  .hidden{display:none !important}
+  img{max-width:100%;display:block}
+
+  .nkbanner{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);color:#fff;
+    background:linear-gradient(135deg,#064a23,#0a7a38 52%,#0f9a45);padding:18px 16px 20px;display:flex;align-items:center;gap:14px;border:1px solid rgba(0,0,0,.05)}
+  .nkbanner::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 15px,transparent 15px 30px);pointer-events:none}
+  .nkbanner::before{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--gold-d),var(--gold),var(--gold-d))}
+  .nk-crest{flex:0 0 auto;width:82px;height:82px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);position:relative;z-index:1;overflow:hidden}
+  .nk-crest img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .nk-txt{position:relative;z-index:1;min-width:0}
+  .nk-txt .y{font-size:.64rem;font-weight:800;letter-spacing:.14em;color:var(--gold)}
+  .nk-txt .m{font-size:.8rem;font-weight:700;line-height:1.12;margin-top:1px}
+  .nk-txt .m b{font-size:1.12rem;font-weight:800;display:block}
+  .nk-txt .a{font-size:.58rem;opacity:.92;margin-top:4px}
+  .nk-pill{display:inline-block;margin-top:8px;background:var(--gold);color:var(--gold-ink);font-weight:800;font-size:.62rem;letter-spacing:.06em;padding:4px 11px;border-radius:999px}
+
+  .cbt-tag{display:flex;align-items:center;justify-content:center;gap:8px;margin:14px 0 2px;
+    font-size:.72rem;font-weight:800;letter-spacing:.14em;color:var(--g700)}
+  .cbt-tag::before,.cbt-tag::after{content:"";height:2px;width:30px;background:var(--gold);border-radius:2px}
+
+  .card{background:var(--card);border-radius:16px;box-shadow:var(--sm);border:1px solid var(--line);padding:18px;margin-top:14px}
+  .card-h{display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:800;color:var(--g800);margin:0 0 4px}
+  .card-h .dot{width:9px;height:9px;border-radius:50%;background:var(--gold)}
+
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 2px}
+  .chip{background:var(--g50);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.8rem;font-weight:700;color:var(--g700);flex:1;text-align:center;min-width:90px}
+  .chip b{display:block;font-size:1.05rem;color:var(--g800)}
+
+  .steps{margin:12px 0 0;padding-left:0;list-style:none;counter-reset:s}
+  .steps li{position:relative;padding:7px 0 7px 36px;font-size:.88rem;color:var(--muted);border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border:none}
+  .steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:6px;width:24px;height:24px;
+    background:var(--g100);color:var(--g700);font-weight:800;border-radius:50%;display:grid;place-items:center;font-size:.76rem}
+
+  label.fld{display:block;margin-top:13px;font-weight:700;font-size:.86rem}
+  label.fld span{color:var(--danger)}
+  .inp,.sel{width:100%;margin-top:6px;padding:13px 14px;border:1.5px solid var(--line);border-radius:11px;
+    font-size:1rem;font-family:inherit;background:#fbfdfb;color:var(--ink)}
+  .inp:focus,.sel:focus{outline:none;border-color:var(--g500);background:#fff;box-shadow:0 0 0 4px var(--g100)}
+  .err{color:var(--danger);font-size:.8rem;margin-top:6px;font-weight:700;display:none}
+  .err.show{display:block}
+
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;cursor:pointer;
+    font-family:inherit;font-weight:800;font-size:1rem;padding:15px 18px;border-radius:13px;transition:.12s}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:linear-gradient(135deg,var(--g700),var(--g500));color:#fff;box-shadow:0 8px 18px rgba(15,154,69,.32);margin-top:18px}
+  .btn-ghost{background:#fff;color:var(--g700);border:1.5px solid var(--line)}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--gold-ink)}
+  .btn-danger{background:linear-gradient(135deg,#e05a3e,#c0392b);color:#fff}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .btn-sm{font-size:.86rem;padding:12px 10px}
+
+  .foot{text-align:center;color:var(--muted);font-size:.72rem;margin:20px 0 30px}
+  .foot b{color:var(--g700)}
+
+  .appbar{position:sticky;top:0;z-index:40;background:linear-gradient(135deg,var(--g800),var(--g600));color:#fff;
+    box-shadow:0 2px 12px rgba(8,58,28,.28)}
+  .appbar-in{max-width:760px;margin:0 auto;padding:9px 14px}
+  .ab-row{display:flex;align-items:center;gap:10px}
+  .logo-badge{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:#fff;overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);position:relative}
+  .logo-badge img{width:100%;height:100%;object-fit:cover;display:block}
+  .ab-title{flex:1;min-width:0}
+  .ab-title b{display:block;font-size:.9rem;font-weight:800;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ab-title small{font-size:.68rem;opacity:.85;font-weight:600}
+  .clock{flex:0 0 auto;text-align:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);
+    border-radius:10px;padding:5px 10px;min-width:82px}
+  .clock .t{font-size:1.15rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+  .clock .l{font-size:.56rem;letter-spacing:.12em;opacity:.85;font-weight:700}
+  .clock.warn{background:#fff4d6;border-color:#f0c04a;color:#7a5600}
+  .clock.danger{background:#ffdede;border-color:#f3a9a9;color:#b32b1c;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.6}}
+  .peserta{display:flex;align-items:center;gap:7px;margin-top:8px;background:rgba(255,255,255,.12);
+    border-radius:9px;padding:6px 10px;font-size:.78rem;font-weight:600}
+  .peserta .av{width:20px;height:20px;border-radius:50%;background:var(--gold);color:var(--gold-ink);
+    display:grid;place-items:center;font-size:.7rem;font-weight:800}
+  .pbar{height:5px;background:rgba(255,255,255,.2);border-radius:9px;margin-top:8px;overflow:hidden}
+  .pbar > i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s;border-radius:9px}
+
+  .qhead{display:flex;align-items:center;justify-content:space-between;margin:-18px -18px 14px;padding:12px 18px;
+    background:var(--g50);border-bottom:1px solid var(--line);border-radius:16px 16px 0 0}
+  .qhead .no{font-weight:800;color:var(--g800);font-size:.95rem}
+  .qhead .no b{color:var(--gold-d)}
+  .ragu-tag{display:none;align-items:center;gap:5px;font-size:.72rem;font-weight:800;color:#9a6500;background:#fff3d6;border:1px solid #f0cf7e;padding:4px 9px;border-radius:999px}
+  .ragu-tag.on{display:flex}
+  .qtext{font-size:1.1rem;font-weight:700;line-height:1.5;margin:0 0 2px}
+  .opts{margin-top:15px;display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border:1.5px solid var(--line);
+    border-radius:13px;cursor:pointer;background:#fbfdfb;transition:.12s;user-select:none}
+  .opt:active{transform:scale(.995)}
+  .opt .mk{flex:0 0 auto;width:30px;height:30px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;
+    font-weight:800;color:var(--muted);background:#fff;font-size:.9rem}
+  .opt .tx{font-size:.97rem;padding-top:3px}
+  .opt.sel{border-color:var(--g500);background:var(--g50);box-shadow:0 0 0 3px var(--g100)}
+  .opt.sel .mk{background:var(--g600);border-color:var(--g600);color:#fff}
+
+  .acts{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:9px;margin-top:18px}
+  .acts .btn{margin-top:0}
+
+  .panel{margin-top:14px}
+  .panel-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--g800);color:#fff;
+    border:none;font-family:inherit;font-weight:800;font-size:.9rem;padding:13px 16px;border-radius:13px;cursor:pointer}
+  .panel-toggle .cnt{font-size:.74rem;font-weight:700;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:999px}
+  .panel-body{background:var(--card);border:1px solid var(--line);border-top:none;border-radius:0 0 13px 13px;padding:14px;margin-top:-2px}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--muted);margin-bottom:12px;font-weight:600}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:7px}
+  .grid button{aspect-ratio:1;border:1.5px solid var(--belum-line);background:var(--belum);border-radius:9px;
+    font-weight:800;font-family:inherit;font-size:.82rem;color:var(--muted);cursor:pointer}
+  .grid button.done{background:var(--answered);color:#fff;border-color:var(--answered)}
+  .grid button.ragu{background:var(--ragu);color:#fff;border-color:var(--ragu)}
+  .grid button.cur{outline:3px solid var(--g800);outline-offset:1px}
+  @media(max-width:360px){.grid{grid-template-columns:repeat(6,1fr)}}
+
+  .overlay{position:fixed;inset:0;background:rgba(8,40,20,.55);backdrop-filter:blur(3px);display:grid;place-items:center;z-index:100;padding:22px}
+  .modal{background:#fff;border-radius:18px;padding:24px 20px;max-width:390px;width:100%;box-shadow:var(--shadow)}
+  .modal h3{margin:0 0 6px;color:var(--g800);font-size:1.2rem;text-align:center}
+  .modal p{margin:0;color:var(--muted);font-size:.9rem;text-align:center}
+  .tally{display:flex;gap:10px;margin:16px 0}
+  .tally div{flex:1;text-align:center;border-radius:12px;padding:10px 4px;border:1px solid var(--line)}
+  .tally b{display:block;font-size:1.4rem}
+  .tally small{font-size:.68rem;color:var(--muted);font-weight:700}
+  .tally .d b{color:var(--answered)} .tally .r b{color:var(--ragu)} .tally .b b{color:var(--danger)}
+  .modal-acts{display:flex;gap:10px;margin-top:6px}
+  .modal-acts .btn{margin-top:0}
+  .spinner{width:46px;height:46px;border:4px solid var(--g100);border-top-color:var(--g600);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .check{width:68px;height:68px;margin:0 auto 12px;border-radius:50%;background:var(--g100);display:grid;place-items:center}
+  .check svg{width:38px;height:38px;stroke:var(--g600)}
+  .sum{display:flex;justify-content:center;gap:26px;margin:14px 0 2px}
+  .sum div{text-align:center} .sum b{display:block;font-size:1.5rem;color:var(--g700)} .sum small{font-size:.72rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="screen-start">
+  <div class="nkbanner">
+    <div class="nk-crest">
+      <img src="assets/logo.webp" alt="Logo MTs Nurul Kamal">
+    </div>
+    <div class="nk-txt">
+      <div class="y">YAYASAN NURUL KAMAL</div>
+      <div class="m">MADRASAH TSANAWIYAH<b>(MTs) NURUL KAMAL</b></div>
+      <div class="a">Sambirejo · Kec. Selupu Rejang · Kab. Rejang Lebong</div>
+      <span class="nk-pill">SOAL PKn · KELAS VII</span>
+    </div>
+  </div>
+
+  <div class="cbt-tag">SISTEM UJIAN BERBASIS KOMPUTER (CBT)</div>
+
+  <div class="chips">
+    <div class="chip"><b>50</b>Soal</div>
+    <div class="chip"><b id="durchip">90</b>Menit</div>
+    <div class="chip"><b>PG</b>Pilihan Ganda</div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="dot"></span>Data Peserta</div>
+    <label class="fld" for="nama">Nama Lengkap <span>*</span></label>
+    <input class="inp" id="nama" type="text" autocomplete="off" placeholder="Masukkan nama lengkap">
+    <div class="err" id="err-nama">Nama wajib diisi.</div>
+
+    <label class="fld" for="kelas">Kelas <span>*</span></label>
+    <select class="sel" id="kelas">
+      <option value="">— Pilih kelas —</option>
+      <option value="7A">7A</option><option value="7B">7B</option><option value="7C">7C</option>
+    </select>
+    <div class="err" id="err-kelas">Kelas wajib dipilih.</div>
+
+    <label class="fld" for="noujian">No. Ujian Peserta <span>*</span></label>
+    <input class="inp" id="noujian" type="text" autocomplete="off" maxlength="30" placeholder="Masukkan no. ujian peserta">
+    <div class="err" id="err-noujian">No. ujian peserta wajib diisi.</div>
+
+    <button class="btn btn-primary" id="btn-start">MASUK &amp; MULAI UJIAN &nbsp;→</button>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="dot"></span>Petunjuk Ujian</div>
+    <ul class="steps">
+      <li>Tulis Nama dengan lengkap dan pilih kelas yang sesuai.</li>
+      <li>Isi No. Ujian Peserta sesuai kartu ujian.</li>
+      <li>Kerjakan semua soal. Gunakan tombol <b>Ragu-ragu</b> untuk menandai soal yang ingin ditinjau ulang.</li>
+      <li>Semua soal <b>wajib dijawab</b> sebelum menekan <b>Akhiri Ujian</b>.</li>
+      <li>Jika waktu habis, jawaban terkirim otomatis. Pastikan internet stabil.</li>
+    </ul>
+  </div>
+
+  <p class="foot">Guru Mapel oleh <b>Widia Nengsih, S. Pd</b> · MTs Nurul Kamal</p>
+</div>
+
+<div id="screen-exam" class="hidden">
+  <div class="appbar">
+    <div class="appbar-in">
+      <div class="ab-row">
+        <div class="logo-badge"><img src="assets/logo.webp" alt="logo"></div>
+        <div class="ab-title"><b>UJIAN PKn — KELAS VII</b><small>MTs Nurul Kamal · CBT</small></div>
+        <div class="clock" id="clock"><div class="t" id="clock-t">90:00</div><div class="l">SISA WAKTU</div></div>
+      </div>
+      <div class="peserta"><span class="av" id="av">A</span><span id="peserta-txt">Peserta</span></div>
+      <div class="pbar"><i id="pbar"></i></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="card" id="qcard">
+      <div class="qhead">
+        <div class="no">SOAL NO. <b id="qno">1</b> / 50</div>
+        <div class="ragu-tag" id="ragutag">★ Ditandai ragu-ragu</div>
+      </div>
+      <p class="qtext" id="qtext"></p>
+      <div class="opts" id="opts"></div>
+
+      <div class="acts">
+        <button class="btn btn-ghost btn-sm" id="btn-prev">◀ Sebelum</button>
+        <button class="btn btn-gold btn-sm" id="btn-ragu">★ Ragu-ragu</button>
+        <button class="btn btn-primary btn-sm" id="btn-next" style="margin-top:0">Lanjut ▶</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <button class="panel-toggle" id="panel-toggle">
+        <span>📋 Daftar Soal</span><span class="cnt" id="panel-cnt">0 / 50 terjawab</span>
+      </button>
+      <div class="panel-body hidden" id="panel-body">
+        <div class="legend">
+          <span><i style="background:var(--answered)"></i>Dijawab</span>
+          <span><i style="background:var(--ragu)"></i>Ragu-ragu</span>
+          <span><i style="background:var(--belum);border:1px solid var(--belum-line)"></i>Belum</span>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+
+    <button class="btn btn-danger" id="btn-finish" style="margin-top:14px">⏹ AKHIRI UJIAN</button>
+    <p class="foot">Guru Mapel oleh <b>Widia Nengsih, S. Pd</b> · MTs Nurul Kamal</p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="ov-confirm">
+  <div class="modal">
+    <h3 id="cf-title">Akhiri Ujian?</h3>
+    <p id="cf-msg">Periksa kembali jawabanmu sebelum mengakhiri.</p>
+    <div class="tally">
+      <div class="d"><b id="t-done">0</b><small>DIJAWAB</small></div>
+      <div class="r"><b id="t-ragu">0</b><small>RAGU</small></div>
+      <div class="b"><b id="t-belum">0</b><small>BELUM</small></div>
+    </div>
+    <div class="modal-acts">
+      <button class="btn btn-ghost" id="cf-cancel" style="margin-top:0">Kembali</button>
+      <button class="btn btn-danger" id="cf-ok" style="margin-top:0">Ya, Akhiri</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="ov-sending">
+  <div class="modal" style="text-align:center">
+    <div class="spinner"></div>
+    <h3>Mengirim jawaban…</h3>
+    <p>Mohon tunggu, jangan tutup halaman ini.</p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="ov-done">
+  <div class="modal">
+    <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h3>Jawaban Terkirim!</h3>
+    <p>Terima kasih, <b id="done-nama"></b>. Jawabanmu sudah tersimpan.</p>
+    <div class="sum"><div><b id="done-ans">0</b><small>Terjawab</small></div><div><b>50</b><small>Total Soal</small></div></div>
+    <p style="margin-top:12px;font-size:.8rem">Silakan tunggu instruksi pengawas. Nilai diumumkan kemudian.</p>
+  </div>
+</div>
+
+<script>
+const CONFIG = {
+  action: "https://docs.google.com/forms/d/e/1FAIpQLSefyop5w1ws6ObVCPouZR3ThCV-Zj6yGrs_2aaiyzNy83XBTg/formResponse",
+  E_NAMA: "entry.227076730",
+  E_KELAS: "entry.1349947496",
+  E_NOUJIAN: "entry.308042165",
+  DURATION_MIN: 90
+};
+const LETTERS = ["A","B","C","D"];
+
+const QBANK = [
+["entry.1853637097","Nama lengkap Ir. Sukarno saat lahir adalah ...",["Mohammad Athar","Koesno Sosro Soekarno","Raden Mas Soewardi Soerjaningrat","Soeroso Tjondronegoro"]],
+["entry.1749570506","Belanda menguasai Indonesia selama kurang lebih 350 tahun, kemudian kekuasaan berpindah kepada Jepang selama ...",["1,5 tahun","2,5 tahun","3 tahun","3,5 tahun"]],
+["entry.492307529","Penyerangan Jepang terhadap pangkalan armada Amerika Serikat di Pearl Harbour menyebabkan pecahnya ...",["Perang Pasifik atau Perang Asia Timur Raya","Perang Dunia I","Perang Salib","Perang Dingin"]],
+["entry.99008391","BPUPK merupakan singkatan dari ...",["Badan Persiapan Usaha Penyelidik Kemerdekaan Indonesia","Badan Penyelidik Usaha Pembentukan Negara Indonesia","Badan Penyelidik Usaha Persiapan Kemerdekaan Indonesia","Panitia Persiapan Kemerdekaan Indonesia"]],
+["entry.1198997693","Sidang pertama BPUPK pada 29 Mei sampai 1 Juni 1945 dipimpin oleh ketua BPUPK, yaitu ...",["Ir. Sukarno","dr. K.R.T. Radjiman Wedyodiningrat","Drs. Mohammad Hatta","Mr. Achmad Soebardjo"]],
+["entry.840453442","Ir. Sukarno memperkenalkan Pancasila sebagai dasar negara secara eksplisit dan jelas dalam sidang BPUPK pada tanggal ...",["28 Mei 1945","29 Mei 1945","31 Mei 1945","1 Juni 1945"]],
+["entry.1304435845","Setelah sidang pertama BPUPK, sidang memutuskan perumusan Pancasila sebagai dasar negara dilakukan oleh ...",["panitia kecil yang diketuai Drs. Mohammad Hatta","seluruh anggota BPUPK secara bergantian","panitia kecil yang diketuai Ir. Sukarno","pemerintah pendudukan Jepang di Jakarta"]],
+["entry.2118093722","Menurut Keputusan Presiden Nomor 24 Tahun 2016, rumusan Pancasila dari pidato Ir. Sukarno di sidang BPUPK, rumusan hasil Panitia Sembilan, hingga rumusan final PPKI merupakan ...",["satu kesatuan proses lahirnya Pancasila sebagai dasar negara","tiga dasar negara yang saling bertentangan","peristiwa yang tidak saling berkaitan","tiga rumusan yang saling menggantikan"]],
+["entry.1934976134","Setelah sidang pertama BPUPK, dibentuk Panitia Kecil yang semula beranggotakan ... orang.",["tujuh","delapan","sembilan","sepuluh"]],
+["entry.947207652","Wakil ketua Panitia Sembilan adalah ...",["Mr. Muhammad Yamin","K.H. Wachid Hasyim","H. Agus Salim","Drs. Moh. Hatta"]],
+["entry.135678724","Susunan keanggotaan Panitia Sembilan dibuat agar mewakili golongan ...",["nasionalis religius dan Islam nasionalis","petani dan pedagang","bangsawan dan pegawai Belanda","pemuda dan pelajar"]],
+["entry.1674716457","Panitia Sembilan menyepakati rancangan preambul yang di dalamnya terdapat rumusan Pancasila pada tanggal ...",["29 Mei 1945","1 Juni 1945","22 Juni 1945","17 Agustus 1945"]],
+["entry.44490052","Muhammad Yamin menyebut rancangan preambul hasil Panitia Sembilan dengan nama ...",["Mukadimah","Piagam Jakarta","Gentlemen's Agreement","Teks Proklamasi"]],
+["entry.1955803863","Sila pertama dalam rancangan preambul hasil Panitia Sembilan berbunyi ...",["Ketuhanan Yang Maha Esa","Kemanusiaan yang adil dan beradab","Persatuan Indonesia","Ketuhanan, dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya"]],
+["entry.1372657602","Rancangan preambul Pancasila disepakati Panitia Sembilan di kediaman Ir. Sukarno, yaitu di Jalan ...",["Pegangsaan Timur No. 56 Jakarta","Diponegoro No. 57 Jakarta","Imam Bonjol No. 1 Jakarta","Malioboro No. 10 Yogyakarta"]],
+["entry.1288559176","Kota Hirosima dibom atom oleh Amerika Serikat pada tanggal ...",["1 Agustus 1945","3 Agustus 1945","6 Agustus 1945","9 Agustus 1945"]],
+["entry.1931545991","Dokuritsu Zyunbi Iinkai adalah nama dalam bahasa Jepang untuk ...",["Badan Penyelidik Usaha Persiapan Kemerdekaan Indonesia (BPUPK)","Panitia Sembilan","Panitia Lencana Negara","Panitia Persiapan Kemerdekaan Indonesia (PPKI)"]],
+["entry.1635645042","Ketua dan wakil ketua PPKI adalah ...",["Sutan Syahrir dan Soekarni","Ir. Sukarno dan Drs. Mohammad Hatta","Mr. Achmad Soebardjo dan Laksamana Maeda","dr. K.R.T. Radjiman Wedyodiningrat dan Ir. Sukarno"]],
+["entry.1175880281","Pada 12 Agustus 1945 di Dalat, Jenderal Terauchi menyatakan bahwa pelaksanaan kemerdekaan Indonesia diserahkan kepada ...",["PPKI","BPUPK","Panitia Sembilan","golongan muda"]],
+["entry.1165493043","Sutan Syahrir menyarankan agar kemerdekaan segera diproklamasikan supaya tidak dianggap sebagai ...",["hasil perundingan dengan Belanda","keputusan Perserikatan Bangsa-Bangsa","pemberian dari Jepang","hadiah dari Amerika Serikat"]],
+["entry.1436511986","Drs. Mohammad Hatta menolak usul agar Ir. Sukarno memproklamasikan kemerdekaan seorang diri karena ...",["Jepang melarang proklamasi dilakukan siapa pun","Ir. Sukarno sedang berada di luar negeri","Sekutu belum menyatakan kemenangan atas Jepang","proklamasi sudah diserahkan kepada PPKI sehingga akan merampas hak anggota PPKI lainnya"]],
+["entry.878296709","Golongan muda menginginkan proklamasi segera tanpa melalui rapat PPKI karena PPKI dianggap sebagai lembaga ...",["bentukan Belanda","bentukan Jepang","bentukan Sekutu","bentukan golongan tua"]],
+["entry.134467988","Peristiwa Rengasdengklok terjadi pada tanggal ...",["14 Agustus 1945","15 Agustus 1945","16 Agustus 1945","17 Agustus 1945"]],
+["entry.1705973545","Perkumpulan golongan muda yang menjemput Ir. Sukarno dan Drs. Mohammad Hatta ke Rengasdengklok bernama ...",["Menteng 31","Jong Java","Boedi Oetomo","Indische Partij"]],
+["entry.1789409792","Rapat PPKI untuk mempersiapkan naskah proklamasi diadakan di rumah Laksamana Maeda karena ...",["rumah Laksamana Maeda dekat dengan Rengasdengklok","pemerintah Jepang melarang rapat di tempat lain","rumah Ir. Sukarno sedang diperbaiki","Hotel Des Indes tempat menginap anggota PPKI tidak menyediakan ruangan untuk rapat"]],
+["entry.2003798667","Teks proklamasi kemerdekaan didiktekan oleh ... dan ditulis oleh ...",["Sukarni dan Sayuti Melik","Drs. Mohammad Hatta dan Ir. Sukarno","Mr. Achmad Soebardjo dan Fatmawati","Sayuti Melik dan Wikana"]],
+["entry.1314287187","Teks proklamasi kemerdekaan ditandatangani atas nama bangsa Indonesia oleh ...",["Ir. Sukarno dan Drs. Mohammad Hatta","seluruh anggota PPKI yang hadir","Ir. Sukarno dan Sayuti Melik","Mr. Achmad Soebardjo dan Sukarni"]],
+["entry.981623385","Teks proklamasi dibacakan pada hari Jumat, 17 Agustus 1945 pukul ...",["03.00 WIB","08.00 WIB","10.00 WIB","24.00 WIB"]],
+["entry.1140221791","Bendera Sang Merah Putih pada 17 Agustus 1945 dikibarkan oleh ...",["Sayuti Melik dan Fatmawati","Sukarni dan Wikana","Ir. Sukarno dan Drs. Mohammad Hatta","Latief Hendradiningrat dan Suhud"]],
+["entry.1838707772","Salah satu makna proklamasi kemerdekaan adalah ...",["dimulainya masa pendudukan Jepang","berakhirnya masa penjajahan dan mulai berlakunya tata hukum nasional","berlakunya kembali hukum kolonial","berdirinya pemerintahan Hindia Belanda"]],
+["entry.217672037","Sehari setelah proklamasi, yaitu 18 Agustus 1945, PPKI mulai bersidang dengan agenda memilih Presiden dan Wakil Presiden serta ...",["membentuk BPUPK","membentuk Panitia Sembilan","menetapkan Undang-Undang Dasar","membacakan teks proklamasi"]],
+["entry.1668584819","Pada sidang PPKI 18 Agustus 1945, sila pertama dalam rancangan preambul hasil Panitia Sembilan diubah menjadi ...",["Ketuhanan Yang Maha Esa","Kemanusiaan yang adil dan beradab","Persatuan Indonesia","Keadilan sosial bagi seluruh rakyat Indonesia"]],
+["entry.1956819758","Pancasila berasal dari bahasa Sanskerta, yaitu panca dan sila yang berarti ...",["tiga dan aturan","empat dan hukum","sepuluh dan asas","lima dan dasar"]],
+["entry.1966427268","Pernyataan bahwa Negara Republik Indonesia berdasar atas Ketuhanan Yang Maha Esa tercantum dalam Pasal ... ayat (1) UUD 1945.",["28","29","30","31"]],
+["entry.429677594","Agama yang diakui negara Indonesia adalah Islam, Kristen, Katolik, Hindu, Buddha, dan ...",["Shinto","Yahudi","Khonghucu","Zoroaster"]],
+["entry.106246609","Pasangan sila dan lambang yang tepat adalah ...",["Persatuan Indonesia – pohon beringin","Ketuhanan Yang Maha Esa – rantai","Kemanusiaan yang adil dan beradab – kepala banteng","Keadilan sosial bagi seluruh rakyat Indonesia – bintang"]],
+["entry.766194025","Beradab dalam sila Kemanusiaan yang Adil dan Beradab berarti ...",["bertindak sesuka hati tanpa aturan","memihak golongan tertentu","mengutamakan kepentingan pribadi","berbudaya, yaitu tindakan dan keputusan sesuai tata nilai yang berlaku di masyarakat"]],
+["entry.475992147","Sila Persatuan Indonesia menjadi landasan untuk mempersatukan rakyat di tengah keberagaman ...",["pendapatan dan pekerjaan","usia dan jenis kelamin","suku, agama, ras, dan antargolongan","tempat tinggal dan pendidikan"]],
+["entry.542018244","Pemilu di Indonesia dilaksanakan dengan asas LUBER, yang merupakan singkatan dari ...",["Langsung, Utama, Bersih, dan Rahasia","Langsung, Umum, Bebas, dan Rahasia","Luas, Umum, Bersih, dan Rata","Jujur, Umum, Bebas, dan Adil"]],
+["entry.1330464708","Contoh penerapan sila keempat di lingkungan sekolah adalah ...",["memilih ketua kelas melalui musyawarah mufakat","memaksakan kehendak kepada teman sekelas","memilih ketua kelas berdasarkan kedekatan pribadi","mengabaikan hasil kesepakatan bersama"]],
+["entry.1579942065","Contoh penerapan sila kelima Pancasila adalah ...",["membeda-bedakan teman berdasarkan suku","mengutamakan kepentingan pribadi","ikut serta dalam kegiatan gotong royong dan menolong orang yang lemah","memaksakan pendapat dalam diskusi"]],
+["entry.408141503","Sila pertama Pancasila juga bermakna bahwa bangsa Indonesia adalah bangsa yang ...",["memaksakan satu agama kepada semua orang","tidak mengakui adanya agama","menolak kepercayaan terhadap Tuhan","saling menghargai perbedaan keyakinan"]],
+["entry.173178195","Ketua Panitia Lencana Negara adalah ...",["Sultan Hamid II","Muhammad Yamin","Ki Hajar Dewantara","Mohammad Natsir"]],
+["entry.1242314956","Rancangan lambang negara yang terpilih berdasarkan kesepakatan adalah milik ...",["Sultan Hamid II","Muhammad Yamin","Ki Hajar Dewantara","R.M.Ng. Poerbatjaraka"]],
+["entry.472257507","Hari Kesaktian Pancasila diperingati setiap tanggal ...",["1 Juni","17 Agustus","30 September","1 Oktober"]],
+["entry.592804147","Sikap yang sesuai dengan penerapan sila pertama dalam kehidupan berbangsa adalah ...",["mengejek ibadah agama lain","menolak berteman dengan pemeluk agama lain","tidak memaksakan suatu agama dan kepercayaan kepada orang lain","memaksa teman mengikuti agama kita"]],
+["entry.251167070","Sikap saling tenggang rasa (tepa salira) merupakan penerapan nilai sila ...",["Ketuhanan Yang Maha Esa","Kemanusiaan yang Adil dan Beradab","Persatuan Indonesia","Keadilan Sosial bagi Seluruh Rakyat Indonesia"]],
+["entry.1486687595","Sikap mengutamakan persatuan serta kepentingan dan keselamatan bangsa di atas kepentingan pribadi dan golongan sesuai dengan nilai sila ...",["Persatuan Indonesia","Ketuhanan Yang Maha Esa","Kemanusiaan yang Adil dan Beradab","Keadilan Sosial bagi Seluruh Rakyat Indonesia"]],
+["entry.301900370","Menghormati dan menjunjung tinggi setiap keputusan yang dicapai melalui musyawarah mufakat merupakan penerapan nilai sila ...",["Ketuhanan Yang Maha Esa","Kemanusiaan yang Adil dan Beradab","Persatuan Indonesia","Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan"]],
+["entry.145459338","Upaya bersungguh-sungguh menciptakan keadilan dalam menjamin hak warga negara dan memajukan kesejahteraan seluruh rakyat merupakan penerapan nilai sila ...",["Ketuhanan Yang Maha Esa","Persatuan Indonesia","Keadilan Sosial bagi Seluruh Rakyat Indonesia","Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan"]]
+];
+
+const Q = QBANK.map(r=>({e:r[0], q:r[1], o:r[2]}));
+const TOTAL = Q.length;
+let cur = 0;
+let answers = {};
+let ragu = {};
+let student = {nama:"",kelas:"",noujian:""};
+let timeLeft = CONFIG.DURATION_MIN*60;
+let timerId = null;
+let submitted = false;
+
+const $ = id => document.getElementById(id);
+const SS_KEY = "cbtPKN7_";
+
+try{ const s=JSON.parse(sessionStorage.getItem(SS_KEY)); if(s){ answers=s.answers||{}; ragu=s.ragu||{}; student=s.student||student; cur=s.cur||0; if(typeof s.timeLeft==="number") timeLeft=s.timeLeft; } }catch(e){}
+function persist(){ try{ sessionStorage.setItem(SS_KEY, JSON.stringify({answers,ragu,student,cur,timeLeft})); }catch(e){} }
+
+$("durchip").textContent = CONFIG.DURATION_MIN;
+
+function clearErr(){ ["err-nama","err-kelas","err-noujian"].forEach(i=>$(i).classList.remove("show")); }
+$("btn-start").addEventListener("click", ()=>{
+  clearErr();
+  const nama=$("nama").value.trim(), kelas=$("kelas").value, noujian=$("noujian").value.trim();
+  let ok=true;
+  if(!nama){$("err-nama").classList.add("show");ok=false;}
+  if(!kelas){$("err-kelas").classList.add("show");ok=false;}
+  if(!noujian){$("err-noujian").classList.add("show");ok=false;}
+  if(!ok) return;
+  student={nama,kelas,noujian}; persist();
+  $("peserta-txt").textContent = nama+" · Kelas "+kelas;
+  $("av").textContent = (nama[0]||"A").toUpperCase();
+  $("screen-start").classList.add("hidden");
+  $("screen-exam").classList.remove("hidden");
+  buildGrid(); render(); startTimer(); window.scrollTo(0,0);
+});
+
+function fmt(s){const m=Math.floor(s/60),ss=s%60;return (m<10?"0":"")+m+":"+(ss<10?"0":"")+ss;}
+function startTimer(){
+  updTimer();
+  timerId=setInterval(()=>{ timeLeft--; if(timeLeft<=0){timeLeft=0;updTimer();clearInterval(timerId);autoSubmit();return;} if(timeLeft%5===0)persist(); updTimer(); },1000);
+}
+function updTimer(){
+  $("clock-t").textContent=fmt(timeLeft);
+  const c=$("clock"); c.classList.remove("warn","danger");
+  if(timeLeft<=60)c.classList.add("danger"); else if(timeLeft<=300)c.classList.add("warn");
+}
+
+function render(){
+  const it=Q[cur];
+  $("qno").textContent=cur+1;
+  $("qtext").textContent=(cur+1)+". "+it.q;
+  $("ragutag").classList.toggle("on", !!ragu[it.e]);
+  $("btn-ragu").textContent = ragu[it.e]?"★ Batal Ragu":"★ Ragu-ragu";
+  const opts=$("opts"); opts.innerHTML="";
+  it.o.forEach((text,i)=>{
+    const value=LETTERS[i]+". "+text;
+    const d=document.createElement("div");
+    d.className="opt"+(answers[it.e]===value?" sel":"");
+    d.innerHTML='<div class="mk">'+LETTERS[i]+'</div><div class="tx">'+text.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</div>';
+    d.addEventListener("click",()=>{
+      answers[it.e]=value; persist();
+      [...opts.children].forEach(c=>c.classList.remove("sel")); d.classList.add("sel");
+      upd();
+      if(cur<TOTAL-1) setTimeout(()=>{cur++;render();window.scrollTo(0,0);},170);
+    });
+    opts.appendChild(d);
+  });
+  $("btn-prev").style.visibility=cur===0?"hidden":"visible";
+  $("btn-next").style.visibility=cur===TOTAL-1?"hidden":"visible";
+  upd();
+}
+function upd(){
+  const n=Object.keys(answers).length;
+  $("pbar").style.width=(n/TOTAL*100)+"%";
+  $("panel-cnt").textContent=n+" / "+TOTAL+" terjawab";
+  const g=$("grid");
+  if(g.children.length) [...g.children].forEach((b,i)=>{
+    const e=Q[i].e;
+    b.className=""; if(ragu[e])b.classList.add("ragu"); else if(answers[e])b.classList.add("done");
+    if(i===cur)b.classList.add("cur");
+  });
+}
+
+$("btn-prev").addEventListener("click",()=>{if(cur>0){cur--;render();window.scrollTo(0,0);}});
+$("btn-next").addEventListener("click",()=>{if(cur<TOTAL-1){cur++;render();window.scrollTo(0,0);}});
+$("btn-ragu").addEventListener("click",()=>{ const e=Q[cur].e; if(ragu[e])delete ragu[e]; else ragu[e]=1; persist(); render(); });
+$("panel-toggle").addEventListener("click",()=>{ $("panel-body").classList.toggle("hidden"); });
+function buildGrid(){
+  const g=$("grid"); g.innerHTML="";
+  for(let i=0;i<TOTAL;i++){ const b=document.createElement("button"); b.textContent=i+1;
+    b.addEventListener("click",()=>{cur=i;render();window.scrollTo(0,0);}); g.appendChild(b); }
+}
+
+function firstUnanswered(){for(let i=0;i<TOTAL;i++){if(!answers[Q[i].e])return i;}return -1;}
+$("btn-finish").addEventListener("click",()=>{
+  const done=Object.keys(answers).length, r=Object.keys(ragu).length, belum=TOTAL-done;
+  $("t-done").textContent=done; $("t-ragu").textContent=r; $("t-belum").textContent=belum;
+  if(belum>0){
+    $("cf-title").textContent="Belum Bisa Diakhiri";
+    $("cf-msg").innerHTML="Masih ada <b>"+belum+" soal</b> yang belum dijawab. Semua soal wajib dijawab sebelum mengakhiri ujian.";
+    $("cf-ok").textContent="Ke Soal Kosong"; $("cf-ok").className="btn btn-primary"; $("cf-ok").dataset.mode="goto";
+  }else{
+    $("cf-title").textContent="Akhiri Ujian?";
+    $("cf-msg").textContent="Semua soal sudah terjawab. Jawaban tidak dapat diubah setelah dikirim.";
+    $("cf-ok").textContent="Ya, Akhiri"; $("cf-ok").className="btn btn-danger"; $("cf-ok").dataset.mode="submit";
+  }
+  $("ov-confirm").classList.remove("hidden");
+});
+$("cf-cancel").addEventListener("click",()=>$("ov-confirm").classList.add("hidden"));
+$("cf-ok").addEventListener("click",()=>{
+  $("ov-confirm").classList.add("hidden");
+  if($("cf-ok").dataset.mode==="goto"){ cur=firstUnanswered(); render(); window.scrollTo(0,0); }
+  else doSubmit(false);
+});
+function autoSubmit(){
+  Q.forEach(it=>{ if(!answers[it.e]) answers[it.e]="A. "+it.o[0]; });
+  alert("Waktu habis! Jawaban dikirim otomatis.");
+  doSubmit(true);
+}
+
+function doSubmit(){
+  if(submitted) return; submitted=true;
+  if(timerId) clearInterval(timerId);
+  $("ov-sending").classList.remove("hidden");
+  const f=document.createElement("form");
+  f.action=CONFIG.action; f.method="POST"; f.target="gform_target";
+  const add=(n,v)=>{const i=document.createElement("input");i.type="hidden";i.name=n;i.value=v;f.appendChild(i);};
+  add(CONFIG.E_NAMA,student.nama); add(CONFIG.E_KELAS,student.kelas); add(CONFIG.E_NOUJIAN,student.noujian);
+  Q.forEach(it=>{ const v=answers[it.e]; if(v) add(it.e,v); });
+  add("fvv","1"); add("pageHistory","0,1"); add("fbzx",String(Math.floor(Math.random()*9e18)+1e18));
+  let ifr=$("gform_target");
+  if(!ifr){ifr=document.createElement("iframe");ifr.name="gform_target";ifr.id="gform_target";ifr.style.display="none";document.body.appendChild(ifr);}
+  ifr.addEventListener("load",onDone,{once:true});
+  document.body.appendChild(f); f.submit();
+  setTimeout(onDone,5000);
+}
+let doneShown=false;
+function onDone(){
+  if(doneShown) return; doneShown=true;
+  try{ sessionStorage.removeItem(SS_KEY); }catch(e){}
+  $("ov-sending").classList.add("hidden");
+  $("done-nama").textContent=student.nama;
+  $("done-ans").textContent=Object.keys(answers).length;
+  $("ov-done").classList.remove("hidden");
+}
+
+window.addEventListener("beforeunload",(e)=>{ if(!submitted && !$("screen-exam").classList.contains("hidden")){ e.preventDefault(); e.returnValue=""; } });
+</script>
+</body>
+</html>
