@@ -283,7 +283,15 @@
   <div class="modal" style="text-align:center">
     <div class="spinner"></div>
     <h3>Mengirim jawaban…</h3>
-    <p>Mohon tunggu, jangan tutup halaman ini.</p>
+    <p>Mohon tunggu, <b>jangan tutup / refresh halaman</b> sampai muncul tulisan "Jawaban Terkirim".</p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="ov-retry">
+  <div class="modal" style="text-align:center">
+    <h3 style="color:#c0392b">Belum Terkirim</h3>
+    <p>Jawaban belum masuk, kemungkinan sinyal lemah. <b>Jawabanmu masih tersimpan.</b> Tekan tombol di bawah untuk mengirim ulang.</p>
+    <button class="btn btn-primary" id="btn-resend" style="margin-top:14px">Kirim Ulang</button>
   </div>
 </div>
 
@@ -291,9 +299,10 @@
   <div class="modal">
     <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
     <h3>Jawaban Terkirim!</h3>
-    <p>Terima kasih, <b id="done-nama"></b>. Jawabanmu sudah tersimpan.</p>
+    <p>Terima kasih, <b id="done-nama"></b>. Jawabanmu <b>sudah terkirim</b>.</p>
+    <p style="font-size:.82rem;color:#5d6c62;margin:2px 0">No. Ujian: <b id="done-noujian"></b></p>
     <div class="sum"><div><b id="done-ans">0</b><small>Terjawab</small></div><div><b>50</b><small>Total Soal</small></div></div>
-    <p style="margin-top:12px;font-size:.8rem">Silakan tunggu instruksi pengawas. Nilai diumumkan kemudian.</p>
+    <p style="margin-top:12px;font-size:.82rem;color:#088a3b;font-weight:700">📸 Screenshot halaman ini sebagai bukti, lalu tunggu instruksi pengawas.</p>
   </div>
 </div>
 
@@ -373,8 +382,10 @@ let submitted = false;
 const $ = id => document.getElementById(id);
 const SS_KEY = "cbtPKN7_";
 
-try{ const s=JSON.parse(sessionStorage.getItem(SS_KEY)); if(s){ answers=s.answers||{}; ragu=s.ragu||{}; student=s.student||student; cur=s.cur||0; if(typeof s.timeLeft==="number") timeLeft=s.timeLeft; } }catch(e){}
-function persist(){ try{ sessionStorage.setItem(SS_KEY, JSON.stringify({answers,ragu,student,cur,timeLeft})); }catch(e){} }
+let hasSaved=false, savedStudent=null;
+try{ const s=JSON.parse(localStorage.getItem(SS_KEY)); if(s && s.student && ((s.answers && Object.keys(s.answers).length) || s.cur)){ answers=s.answers||{}; ragu=s.ragu||{}; student=s.student||student; savedStudent=s.student; cur=s.cur||0; if(typeof s.timeLeft==="number") timeLeft=s.timeLeft; hasSaved=true; } }catch(e){}
+try{ if(hasSaved && savedStudent){ var _n=$("nama"), _k=$("kelas"), _o=$("noujian"); if(_n)_n.value=savedStudent.nama||""; if(_o)_o.value=savedStudent.noujian||""; if(_k && savedStudent.kelas) _k.value=savedStudent.kelas; if(!$("resume-hint")){ var _h=document.createElement("div"); _h.id="resume-hint"; _h.style.cssText="background:#eef6ff;border:1px solid #bcd9f5;color:#234e74;border-radius:10px;padding:9px 12px;font-size:.8rem;font-weight:600;margin-top:12px"; _h.textContent="Sesi sebelumnya ditemukan. Masuk dengan nama & no. ujian yang sama untuk melanjutkan dari soal terakhir."; var _bs=$("btn-start"); if(_bs&&_bs.parentNode) _bs.parentNode.insertBefore(_h,_bs); } } }catch(e){}
+function persist(){ try{ localStorage.setItem(SS_KEY, JSON.stringify({answers,ragu,student,cur,timeLeft})); }catch(e){} }
 
 $("durchip").textContent = CONFIG.DURATION_MIN;
 
@@ -387,6 +398,9 @@ $("btn-start").addEventListener("click", ()=>{
   if(!kelas){$("err-kelas").classList.add("show");ok=false;}
   if(!noujian){$("err-noujian").classList.add("show");ok=false;}
   if(!ok) return;
+  var sameAsSaved = hasSaved && savedStudent && String(savedStudent.nama||"").trim().toLowerCase()===nama.toLowerCase() && String(savedStudent.noujian||"").trim()===noujian;
+  if(!sameAsSaved){ answers={}; ragu={}; cur=0; timeLeft=CONFIG.DURATION_MIN*60; }
+  else { var _fu=firstUnanswered(); if(_fu>=0) cur=_fu; }
   student={nama,kelas,noujian}; persist();
   $("peserta-txt").textContent = nama+" · Kelas "+kelas;
   $("av").textContent = (nama[0]||"A").toUpperCase();
@@ -479,9 +493,11 @@ function autoSubmit(){
   doSubmit(true);
 }
 
+let sending=false, submitTimer=null;
 function doSubmit(){
-  if(submitted) return; submitted=true;
-  if(timerId) clearInterval(timerId);
+  if(doneShown||sending) return; sending=true;
+  if(timerId){ clearInterval(timerId); timerId=null; }
+  if($("ov-retry")) $("ov-retry").classList.add("hidden");
   $("ov-sending").classList.remove("hidden");
   const f=document.createElement("form");
   f.action=CONFIG.action; f.method="POST"; f.target="gform_target";
@@ -491,19 +507,28 @@ function doSubmit(){
   add("fvv","1"); add("pageHistory","0,1"); add("fbzx",String(Math.floor(Math.random()*9e18)+1e18));
   let ifr=$("gform_target");
   if(!ifr){ifr=document.createElement("iframe");ifr.name="gform_target";ifr.id="gform_target";ifr.style.display="none";document.body.appendChild(ifr);}
-  ifr.addEventListener("load",onDone,{once:true});
+  ifr.onload=function(){ clearTimeout(submitTimer); onDone(); };
   document.body.appendChild(f); f.submit();
-  setTimeout(onDone,5000);
+  clearTimeout(submitTimer);
+  submitTimer=setTimeout(function(){ sending=false; showRetry(); }, 15000);
+}
+function showRetry(){
+  if(doneShown) return;
+  $("ov-sending").classList.add("hidden");
+  if($("ov-retry")) $("ov-retry").classList.remove("hidden");
 }
 let doneShown=false;
 function onDone(){
-  if(doneShown) return; doneShown=true;
-  try{ sessionStorage.removeItem(SS_KEY); }catch(e){}
+  if(doneShown) return; doneShown=true; submitted=true; sending=false;
+  try{ localStorage.removeItem(SS_KEY); }catch(e){}
   $("ov-sending").classList.add("hidden");
+  if($("ov-retry")) $("ov-retry").classList.add("hidden");
   $("done-nama").textContent=student.nama;
   $("done-ans").textContent=Object.keys(answers).length;
+  if($("done-noujian")) $("done-noujian").textContent=student.noujian||"";
   $("ov-done").classList.remove("hidden");
 }
+(function(){ var b=$("btn-resend"); if(b) b.addEventListener("click", function(){ doSubmit(); }); })();
 
 window.addEventListener("beforeunload",(e)=>{ if(!submitted && !$("screen-exam").classList.contains("hidden")){ e.preventDefault(); e.returnValue=""; } });
 </script>
